@@ -9,7 +9,6 @@ import {
   storeItemInLocalStorage,
 } from "@/utils";
 import { useRouter } from "next/router";
-import useAnalytics, { ANALYTICS_EVENTS } from "@/hooks/useAnalytics";
 
 export type User = {
   firstName: string;
@@ -124,8 +123,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(false);
   const [displayedMessage, setDisplayedMessage] = useState("");
 
-  const { trackEvent } = useAnalytics();
-
   const refreshAuth = async () => {
     // try {
     //   const token = getItemFromLocalStorage("token");
@@ -157,7 +154,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setErrorAuth("");
     setSuccessAuth("");
     setAuthenticatingUser(true);
-    trackEvent(ANALYTICS_EVENTS.SignUp, {email: email}); // track new signup
     const response = await createUser(email, password);
     if (response.success) {
       const { data } = response;
@@ -179,8 +175,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setErrorAuth("");
     setSuccessAuth("");
     setAuthenticatingUser(true);
-
-    trackEvent(ANALYTICS_EVENTS.Login, {email: email}); // track new login
 
     const response = await signIn(email, password);
     if (response.success) {
@@ -226,8 +220,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setErrorAuth("");
     setSuccessAuth("");
 
-    trackEvent(ANALYTICS_EVENTS.Login); // track new login
-
     try {
       const response = await googleLogin(auth_token);
       const { user, token } = response;
@@ -245,12 +237,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-
   const handleGoogleSignUp = async (auth_token: string) => {
     setErrorAuth("");
     setSuccessAuth("");
-
-    trackEvent(ANALYTICS_EVENTS.SignUp); // track new signup
 
     try {
       const response = await googleSignUp(auth_token);
@@ -276,7 +265,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const logout = (originalUrl = "/") => {
     removeItemFromLocalStorage("token");
     removeItemFromLocalStorage("user");
-    trackEvent(ANALYTICS_EVENTS.Logout); // track new logout
     setSocketToken(undefined);
     setAuthenticatingUser(false);
     setUser(undefined);

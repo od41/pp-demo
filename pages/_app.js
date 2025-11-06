@@ -9,7 +9,6 @@ import dynamic from "next/dynamic";
 import localFont from "next/font/local";
 import { Toaster } from "@/components/ui/toaster";
 import { useAuth } from "@/hooks/useAuth";
-import useAnalytics from "@/hooks/useAnalytics";
 import { useEffect } from "react";
 
 const AuthenticatedLayout = dynamic(
@@ -42,18 +41,6 @@ const layouts = {
 
 function App({ Component, pageProps }) {
   const { user } = useAuth();
-  const analytics = useAnalytics();
-
-  // Identify user when logged in
-  useEffect(() => {
-    if (user) {
-      analytics.identify(user.email, {
-        first_name: user.firstName,
-        last_name: user.lastName,
-        email: user.email,
-      });
-    }
-  }, [user]);
 
   const Layout =
     layouts[Component.layout] ||

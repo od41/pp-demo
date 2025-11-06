@@ -1,6 +1,5 @@
 import React, { createContext, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import useAnalytics, { ANALYTICS_EVENTS } from "@/hooks/useAnalytics";
 
 const API_URL = process.env.API_URL;
 
@@ -31,10 +30,8 @@ export const PaymentProvider = ({
   const [showPaymentModal, setShowPaymentModal] = useState(false);
 
   const { user } = useAuth();
-  const { trackEvent } = useAnalytics();
 
   const goToPayment = async (url: string) => {
-    trackEvent(ANALYTICS_EVENTS.PurchaseStarted); // track a new purchase
     // setLoading(true);
     // // const url = "http://localhost:3000/consolidated/";
     // console.log("gtpayment", url);

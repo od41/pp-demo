@@ -7,7 +7,6 @@ import { cardData } from "@/data/icons";
 import Cards from "@/components/cards";
 import { useRouter } from "next/router";
 import { storeItemInLocalStorage } from "@/utils";
-import useAnalytics from "@/hooks/useAnalytics";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Portal from "@/components/portal";
 import WrappedRichTextEditor from "@/components/wrapped-rich-text-editor";
@@ -19,7 +18,6 @@ const Chats = () => {
   const myRef = useRef<HTMLDivElement | null>(null);
 
   const { user, setShowAuthModal } = useAuth();
-  const { trackEvent, trackAIConversation } = useAnalytics();
 
   const {
     botLoading,
@@ -50,7 +48,6 @@ const Chats = () => {
 
   const handleSubmit = async (userInput: any) => {
     storeItemInLocalStorage("firstUserPrompt", userInput); // save first prompt from user to localstorage
-    trackAIConversation(userInput); // start new conversation w/ bot
     // reset
     if (chatResponseHistory) {
       //   reset
